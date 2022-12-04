@@ -28,7 +28,17 @@ public class Main {
         System.out.println(validateCard(1234567890123456L));
         System.out.println(validateCard(1234567890123452L));
 
-
+        System.out.println(numToEng(0));
+        System.out.println(numToEng(1));
+        System.out.println(numToEng(10));
+        System.out.println(numToEng(11));
+        System.out.println(numToEng(20));
+        System.out.println(numToEng(21));
+        System.out.println(numToEng(101));
+        System.out.println(numToEng(110));
+        System.out.println(numToEng(111));
+        System.out.println(numToEng(120));
+        System.out.println(numToEng(121));
     }
 
     public static int[] encrypt(String source) {
@@ -215,6 +225,74 @@ public class Main {
             sum += sumCurr;
         }
         return 10 - (sum % 10) == lastDigit;
+    }
+
+    public static String numToEng(int number){
+        if (number > 999) {
+            return "";
+        }
+
+        Map<Integer, String> unitsNames =  Map.of(
+                0, "zero",
+                1, "one",
+                2, "two",
+                3, "three",
+                4, "four",
+                5, "five",
+                6, "six",
+                7, "seven",
+                8, "eight",
+                9, "nine"
+        );
+        Map<Integer, String> tensNames = Map.of(
+                10, "ten",
+                11, "eleven",
+                12, "twelve",
+                13, "thirteen",
+                14, "fourteen",
+                15, "fifteen",
+                16, "sixteen",
+                17, "seventeen",
+                18, "eighteen",
+                19, "nineteen"
+        );
+        Map<Integer, String> decaNames = Map.of(
+                20, "twenty",
+                30, "thirty",
+                40, "forty",
+                50, "fifty",
+                60, "sixty",
+                70, "seventy",
+                80, "eighty",
+                90, "ninety"
+        );
+
+
+//        915
+        int unit = number % 10;
+        int deca = number % 100;
+        int hundred = number / 100;
+
+        ArrayList<String> result = new ArrayList<>();
+        if (hundred != 0){
+            result.add(unitsNames.get(hundred) == null ? "" : unitsNames.get(hundred) + " " + (hundred == 1 ? "hundred" : "hundreds"));
+        }
+        if (deca >= 10 && deca < 20) {
+            result.add(tensNames.get(deca) == null ? "": tensNames.get(deca));
+
+        } else {
+            int d = deca / 10;
+            int u = deca % 10;
+            if (d > 0 && u == 0){
+                result.add(decaNames.get(d * 10) == null ? "" : decaNames.get(d * 10));
+            } else if (d > 0 && u > 0) {
+                result.add(decaNames.get(d * 10) == null ? "" : decaNames.get(d * 10));
+                result.add(unitsNames.get(u) == null ? "" : unitsNames.get(u));
+            } else if (d == 0){
+                result.add(unitsNames.get(u) == null ? "" : unitsNames.get(u));
+            }
+        }
+        return String.join(" ", result).strip();
     }
 }
 
