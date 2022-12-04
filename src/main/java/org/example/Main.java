@@ -39,6 +39,17 @@ public class Main {
         System.out.println(numToEng(111));
         System.out.println(numToEng(120));
         System.out.println(numToEng(121));
+        System.out.println(numToRu(0));
+        System.out.println(numToRu(1));
+        System.out.println(numToRu(10));
+        System.out.println(numToRu(11));
+        System.out.println(numToRu(20));
+        System.out.println(numToRu(21));
+        System.out.println(numToRu(101));
+        System.out.println(numToRu(110));
+        System.out.println(numToRu(111));
+        System.out.println(numToRu(120));
+        System.out.println(numToRu(121));
     }
 
     public static int[] encrypt(String source) {
@@ -269,13 +280,87 @@ public class Main {
 
 
 //        915
-        int unit = number % 10;
         int deca = number % 100;
         int hundred = number / 100;
 
         ArrayList<String> result = new ArrayList<>();
         if (hundred != 0){
             result.add(unitsNames.get(hundred) == null ? "" : unitsNames.get(hundred) + " " + (hundred == 1 ? "hundred" : "hundreds"));
+        }
+        if (deca >= 10 && deca < 20) {
+            result.add(tensNames.get(deca) == null ? "": tensNames.get(deca));
+
+        } else {
+            int d = deca / 10;
+            int u = deca % 10;
+            if (d > 0 && u == 0){
+                result.add(decaNames.get(d * 10) == null ? "" : decaNames.get(d * 10));
+            } else if (d > 0 && u > 0) {
+                result.add(decaNames.get(d * 10) == null ? "" : decaNames.get(d * 10));
+                result.add(unitsNames.get(u) == null ? "" : unitsNames.get(u));
+            } else if (d == 0){
+                result.add(unitsNames.get(u) == null ? "" : unitsNames.get(u));
+            }
+        }
+        return String.join(" ", result).strip();
+    }
+    public static String numToRu(int number) {
+        if (number > 999) {
+            return "";
+        }
+
+        Map<Integer, String> unitsNames = Map.of(
+                0, "ноль",
+                1, "один",
+                2, "два",
+                3, "три",
+                4, "четыре",
+                5, "пять",
+                6, "шесть",
+                7, "семь",
+                8, "восемь",
+                9, "девять"
+        );
+        Map<Integer, String> tensNames = Map.of(
+                10, "десять",
+                11, "одиннадцать",
+                12, "двенадцать",
+                13, "тринадцать",
+                14, "четырнадцать",
+                15, "пятнадцать",
+                16, "шестнадцать",
+                17, "семнадцать",
+                18, "восемнадцать",
+                19, "девятнадцать"
+        );
+        Map<Integer, String> decaNames = Map.of(
+                20, "двадцать",
+                30, "тридцать",
+                40, "сорок",
+                50, "пятьдесят",
+                60, "шестьдесят",
+                70, "семьдесят",
+                80, "восемьдесят",
+                90, "девяносто"
+        );
+        Map<Integer, String> hundredNames = Map.of(
+                1, "сто",
+                2, "двести",
+                3, "триста",
+                4, "четыреста",
+                5, "пятьсот",
+                6, "шестьсот",
+                7, "семьсот",
+                8, "восемьсот",
+                9, "девятьсот"
+        );
+
+
+        int deca = number % 100;
+        int hundred = number / 100;
+        ArrayList<String> result = new ArrayList<>();
+        if (hundred != 0) {
+            result.add(hundredNames.get(hundred) == null ? "" : hundredNames.get(hundred));
         }
         if (deca >= 10 && deca < 20) {
             result.add(tensNames.get(deca) == null ? "": tensNames.get(deca));
