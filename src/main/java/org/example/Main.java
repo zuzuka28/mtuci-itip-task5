@@ -1,7 +1,11 @@
 package org.example;
 
 import java.util.*;
-
+import java.util.*;
+import com.google.common.base.Charsets;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hasher;
+import com.google.common.hash.Hashing;
 public class Main {
     public static void main(String[] args) {
         System.out.println(Arrays.toString(encrypt("Hello")));
@@ -50,6 +54,15 @@ public class Main {
         System.out.println(numToRu(111));
         System.out.println(numToRu(120));
         System.out.println(numToRu(121));
+
+        System.out.println(getSha256Hash("password123"));
+        System.out.println(getSha256Hash("Fluffy@home"));
+        System.out.println(getSha256Hash("Hey dude!"));
+
+        System.out.println(correctTitle("jOn SnoW, kINg IN thE noRth."));
+        System.out.println(correctTitle("sansa stark, lady of winterfell."));
+        System.out.println(correctTitle("TYRION LANNISTER, HAND OF THE QUEEN."));
+        System.out.println(correctTitle("I DIDN'T WATCH THE-GAME-OF-THRONES."));
 
         System.out.println(hexLattice(1));
         System.out.println(hexLattice(7));
@@ -385,7 +398,33 @@ public class Main {
         }
         return String.join(" ", result).strip();
     }
+    public static HashCode getSha256Hash(String password) {
+        Hasher hasher = Hashing.sha256().newHasher();
+        hasher.putString(password, Charsets.UTF_8);
+        HashCode sha256 = hasher.hash();
 
+        return sha256;
+    }
+
+    public static String correctTitle(String title) {
+        String[] words = title.split(" ");
+        for (int i = 0; i < words.length; i++) {
+            if(words[i].matches("(?i)^(in|and|the|of)$")) {
+                words[i] = words[i].toLowerCase();
+                continue;
+            }
+            if(words[i].contains("-")) {
+                String[] tmp = words[i].split("-");
+                for(int j = 0; j < tmp.length; j++) {
+                    tmp[j] = tmp[j].substring(0, 1).toUpperCase() + tmp[j].substring(1).toLowerCase();
+                }
+                words[i] = String.join("-", tmp);
+                continue;
+            }
+            words[i] = words[i].substring(0, 1).toUpperCase() + words[i].substring(1).toLowerCase();
+        }
+        return String.join(" ", words);
+    }
     public static boolean checkHex(int number){
         int i = 1;
         int hexNumber = 1;
