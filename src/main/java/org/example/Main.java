@@ -50,6 +50,12 @@ public class Main {
         System.out.println(numToRu(111));
         System.out.println(numToRu(120));
         System.out.println(numToRu(121));
+
+        System.out.println(hexLattice(1));
+        System.out.println(hexLattice(7));
+        System.out.println(hexLattice(19));
+        System.out.println(hexLattice(37));
+        System.out.println(hexLattice(61));
     }
 
     public static int[] encrypt(String source) {
@@ -378,6 +384,48 @@ public class Main {
             }
         }
         return String.join(" ", result).strip();
+    }
+
+    public static boolean checkHex(int number){
+        int i = 1;
+        int hexNumber = 1;
+        while (hexNumber != number){
+            if (hexNumber > number){
+                return false;
+            }
+            hexNumber = 3*i*(i-1)+1;
+            i++;
+        }
+        return true;
+    }
+    public static int getHexIteration(int number){
+        int i = 1;
+        int hexNumber = 1;
+        while (hexNumber != number){
+            hexNumber = 3*i*(i-1)+1;
+            i++;
+        }
+        return i;
+    }
+    public static String hexLattice(int number) {
+        if (!checkHex(number)){
+            return "invalid";
+        }
+        int edge = getHexIteration(number) - 1;
+        int centerLine = edge*2 - 1;
+        ArrayList<String> halfFigure = new ArrayList<>();
+        for (int i = edge; i < centerLine; i++){
+            String row = " ".repeat(centerLine - i) + "o ".repeat(i) + " ".repeat(centerLine - i);
+            halfFigure.add(row);
+        }
+        ArrayList<String> reversedHalfFigure = new ArrayList<>(halfFigure);
+        Collections.reverse(reversedHalfFigure);
+        if (centerLine == -1) {
+            return "o";
+        }
+        return String.join("\n", halfFigure) +
+                "\n" + "o ".repeat(centerLine) + "\n" +
+                String.join("\n", reversedHalfFigure);
     }
 }
 
