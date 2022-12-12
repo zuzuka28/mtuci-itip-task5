@@ -11,6 +11,8 @@ public class Main {
         System.out.println(canMove("Rook", "A8", "H8"));
         System.out.println(canMove("Bishop", "A7", "G1"));
         System.out.println(canMove("Queen", "C4", "D6"));
+        System.out.println(canMove("Pawn", "D2", "D4"));
+        System.out.println(canMove("Pawn", "D2", "D3"));
 
         System.out.println(canComplete("butl", "beautiful"));
         System.out.println(canComplete("butlz", "beautiful"));
@@ -116,7 +118,7 @@ public class Main {
     }
 
     public static boolean pawn(int startPosX, int startPosY, int posX, int posY){
-        return startPosX == posX && startPosY + 1 == posY;
+        return startPosX + 1 == posX && startPosY == posY;
     }
     public static boolean king (int startPosX, int startPosY, int posX, int posY){
         return Math.abs(startPosX - posX) <= 1 &&  Math.abs(startPosY - posY) <= 1;
@@ -138,10 +140,19 @@ public class Main {
 
     public static boolean canMove(String figureName, String start, String end) {
         return switch (figureName) {
-            case "Pawn" -> pawn(
-                    getColPosition(start), getRowPosition(start),
-                    getColPosition(end), getRowPosition(end)
-            );
+            case "Pawn" -> getColPosition(start) == 1 ?
+                        pawn(
+                                getColPosition(start), getRowPosition(start),
+                                getColPosition(end), getRowPosition(end)
+                        ) || pawn(
+                            getColPosition(start) + 1, getRowPosition(start),
+                            getColPosition(end), getRowPosition(end)
+                        )
+                    :
+                            pawn(
+                        getColPosition(start), getRowPosition(start),
+                        getColPosition(end), getRowPosition(end)
+                    );
             case "Rook" -> rook(
                     getColPosition(start), getRowPosition(start),
                     getColPosition(end), getRowPosition(end)
